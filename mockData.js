@@ -1,4 +1,4 @@
-{
+let data = {
     "introduction":{
         "header":"Header",
         "body":"body" 
@@ -28,3 +28,5 @@
         "f":["Hint One", "Hint Two", "Hint Three"]
     }
 }
+
+export { mockData };
