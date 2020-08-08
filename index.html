@@ -1,14 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Document</title>
-</head>
-<body>
-    
-    <script>
-        console.log('bork')
+  </head>
+  <body>
+    <header>
+      <h3>Tiny Quiz</h3>
+    </header>
+    <div id="main">
+      <div id="intro-message"></div>
+    </div>
+    <div class="teacher-message">
+      A Message from your teacher
+    </div>
+    <button id="next-button">Start Quiz/Next/Results</button>
+
+    <script type="module">
+      import { data } from "./mockData.js";
+      console.log("data: ", data);
+
+      function initialSetup() {
+        document.getElementById(
+          "intro-message"
+        ).innerHTML = `Hello students, This quiz is for ${
+          data.introduction.subject
+        } and has ${
+          Object.keys(data.questions).length
+        } questions. Please submit your results. Good luck!`;
+      }
+      initialSetup();
     </script>
-</body>
+  </body>
 </html>
