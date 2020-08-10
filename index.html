@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <header>
+      <h3>Tiny Quiz</h3>
+    </header>
+    <div id="main">
+      <div id="intro-message">
+        <div id="intro-message-header"></div>
+        <div id="intro-message-body"></div>
+      </div>
+    </div>
+    <div class="teacher-message">
+      A Message from your teacher
+    </div>
+    <button id="next-button">Start Quiz/Next/Results</button>
+
+    <script type="module">
+      import { data } from "./mockData.js";
+
+      function initialSetup() {
+        let header = document.getElementById("intro-message-header");
+        if (header !== "" && header !== "undefined" && header !== null) {
+          document.getElementById("intro-message-header").innerHTML =
+            data.introduction.header;
+        }
+
+        document.getElementById(
+          "intro-message-body"
+        ).innerHTML = `Hello students, This quiz is for ${
+          data.introduction.subject
+        } and has ${
+          Object.keys(data.questions).length
+        } questions. Please submit your results. Good luck!`;
+
+        document.getElementById("next-button").innerText =
+          data.introduction.nextButton;
+      }
+      initialSetup();
+    </script>
+  </body>
+</html>
