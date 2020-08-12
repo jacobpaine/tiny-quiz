@@ -3,20 +3,32 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <title>Tiny Quiz</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Risque&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles/index.css" />
   </head>
   <body>
     <header>
-      <h3>Tiny Quiz</h3>
+      <div class="headerContainer">
+        <h3>Tiny Quiz</h3>
+        <img src="images/star.png" alt="Star" id="star" />
+      </div>
     </header>
     <div id="main">
+      <div id="homePageImage">
+        <img src="images/robot.png" alt="Robot" id="robot"/>
+      </div>
+      <div id="mainContent">
       <div id="intro-message"></div>
+      <div class="teacher-message">
+        A Message from your teacher
+      </div>
+      <button id="next-button">Start Quiz</button>
     </div>
-    <div class="teacher-message">
-      A Message from your teacher
-    </div>
-    <button id="next-button">Start Quiz/Next/Results</button>
-
+  </div>
     <script type="module">
       import { data } from "./mockData.js";
       console.log("data: ", data);

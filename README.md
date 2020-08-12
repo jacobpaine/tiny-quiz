@@ -8,7 +8,7 @@ Tiny quiz was created with adult learners in mind. A no frills layout, so the us
 
 
 ## Link to your wireframes/prototype
-
+https://www.figma.com/file/UB2BKA0MGQDQQGm6p74YV9/Tiny?node-id=20%3A12
 
 ## Link to the deployed project 
 
