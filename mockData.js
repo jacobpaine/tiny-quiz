@@ -1,8 +1,8 @@
 let data = {
   introduction: {
     subject: "Particle Physics",
-    header: "Header",
-    body: "body",
+    header: "Some Kind of Magical Header",
+    nextButton: "Start Quiz",
   },
   questions: {
     a: "First question",
