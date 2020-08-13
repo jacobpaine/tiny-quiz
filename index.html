@@ -12,23 +12,27 @@
   </head>
   <body>
     <header>
-      <div class="headerContainer">
+      <div class="header-container">
         <h3>Tiny Quiz</h3>
         <img src="images/star.png" alt="Star" id="star" />
       </div>
     </header>
     <div id="main">
-      <div id="homePageImage">
-        <img src="images/robot.png" alt="Robot" id="robot"/>
+      <div id="home-image">
+        <img src="images/robot.png" alt="Robot" id="robot" />
       </div>
-      <div id="mainContent">
-      <div id="intro-message"></div>
-      <div class="teacher-message">
-        A Message from your teacher
+      <div class="home-message">
+        <img
+          src="images/teacherMessage.png"
+          alt="Robot Message"
+          id="robot-message"
+        />
       </div>
-      <button id="next-button">Start Quiz</button>
+      <div class="home-container">
+        <div class="message" id="intro-message"></div>
+        <button class="button" id="home-button">Start Quiz</button>
+      </div>
     </div>
-  </div>
     <script type="module">
       import { data } from "./mockData.js";
       console.log("data: ", data);
