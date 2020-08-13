@@ -33,20 +33,118 @@
         <button class="button" id="home-button">Start Quiz</button>
       </div>
     </div>
+      <div id="intro-message">
+        <div id="intro-message-header"></div>
+        <div id="intro-message-body"></div>
+      </div>
+    </div>
+    <div id="question-box"></div>
+    <div id="hint-box"></div>
+    <div id="answer-box">
+      <div id="officialAnswer"></div>
+      <div id="studentAnswer"></div>
+    </div>
+    <button id="next-button"></button>
+
     <script type="module">
       import { data } from "./mockData.js";
-      console.log("data: ", data);
+      const nextButton = document.getElementById("next-button");
+      let questionBox = document.getElementById("question-box");
+      let hintBox = document.getElementById("hint-box");
+      let answerBox = document.getElementById("answer-box");
+      let introMessageHeader = document.getElementById("intro-message-header");
+      let introMessageBody = document.getElementById("intro-message-body");
+      let teacherMessage = document.getElementById("teacher-message");
+
+      function saveSession(location, hint, answer) {
+        sessionStorage.location = location;
+        sessionStorage.answer = {
+          showAnswer: answer.showAnswer,
+          onScreen: answer.onScreen,
+          studentAnswer: answer.studentAnswer,
+        };
+        sessionStorage.hint = {
+          showHint: hint.showHint,
+          onScreen: hint.onScreen,
+        };
+      }
+
+      function loadHints(sessionData) {}
+
+      function loadSession(session) {
+        const location = session.location;
+        const hint = session.hint;
+        const answer = session.answer;
+        console.log("data.questions[location];: ", data.questions[location]);
+        console.log("questionBox: ", questionBox);
+        questionBox.innerText = data.questions[location];
+
+        if (hint) {
+          // loadHints(hint) from sessionData (this should be filled out in the Hint function ticket)
+        }
+        if (answer) {
+          // loadAnswers from sessionStorage in case they are coming back to this question
+          // answerBox.innerText = data.answers[location];
+        }
+      }
 
       function initialSetup() {
+        saveSession("introduction", { showHint: false, onScreen: null }, {});
+
+        let header = document.getElementById("intro-message-header");
+        if (header !== "" && header !== "undefined" && header !== null) {
+          document.getElementById("intro-message-header").innerHTML =
+            data.introduction.header;
+        }
+
         document.getElementById(
-          "intro-message"
+          "intro-message-body"
         ).innerHTML = `Hello students, This quiz is for ${
           data.introduction.subject
         } and has ${
           Object.keys(data.questions).length
         } questions. Please submit your results. Good luck!`;
+
+        document.getElementById("next-button").innerText =
+          data.introduction.nextButton;
       }
-      initialSetup();
+
+      function nextCard() {
+        // Always clear the questions/answers/hints from the DOM
+        questionBox.innerText = "";
+        hintBox.innerText = "";
+        answerBox.innerText = "";
+
+        // change session data to increment the card intro to a, a to b etc
+        if (sessionStorage.location === "introduction") {
+          // clear card
+          introMessageHeader.innerText = "";
+          introMessageBody.innerText = "";
+          teacherMessage.innerText = "";
+          // "a" is always after intro
+          sessionStorage.location = "a";
+        } else if (sessionStorage.location === "results") {
+          // results is always last, or if there is an error in the JSON
+          console.log("Results");
+          // Fire Results function - showResults()
+        } else {
+          const questions = Object.keys(data.questions).sort();
+          const nextQuestion = questions.indexOf(sessionStorage.location) + 1;
+          sessionStorage.location = questions[nextQuestion] || "results";
+        }
+
+        loadSession(sessionStorage);
+      }
+
+      function showResuts() {}
+
+      nextButton.addEventListener("click", nextCard);
+
+      if (sessionStorage.location) {
+        loadSession(sessionStorage);
+      } else {
+        initialSetup();
+      }
     </script>
   </body>
 </html>
