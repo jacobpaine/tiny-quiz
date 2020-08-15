@@ -82,12 +82,13 @@
       }
 
       function loadSession(session) {
-        window.sessionStorage.clear();
+        
         const location = session.location;
         const hint = session.hint;
         const answer = session.answer;
         const hintButton = document.querySelector(".hint-button");
-        console.log("data.questions[location];: ", data.questions[location]);
+        console.log("data.questions[location];: ", data.questions);
+        console.log("location", location)
         console.log("questionBox: ", questionBox);
         questionBox.innerText = data.questions[location];
 
@@ -137,6 +138,7 @@
           introMessageBody.innerText = "";
           // "a" is always after intro
           sessionStorage.location = "a";
+          console.log("session storage location", sessionStorage.location)
         } else if (sessionStorage.location === "results") {
           // results is always last, or if there is an error in the JSON
           console.log("Results");
@@ -146,7 +148,7 @@
           const nextQuestion = questions.indexOf(sessionStorage.location) + 1;
           sessionStorage.location = questions[nextQuestion] || "results";
         }
-
+console.log("session storage before next card", sessionStorage)
         loadSession(sessionStorage);
       }
 
