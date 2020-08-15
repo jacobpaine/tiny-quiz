@@ -44,7 +44,10 @@
       <div id="officialAnswer"></div>
       <div id="studentAnswer"></div>
     </div>
+    <div class="hint-button"></div>
     <button id="next-button"></button>
+
+
 
     <script type="module">
       import { data } from "./mockData.js";
@@ -69,18 +72,31 @@
         };
       }
 
-      function loadHints(sessionData) {}
+      function loadHints(sessionData) {
+
+        //on hint button click
+
+        if (session.hint !== '') {
+
+          hintBox.innerHTML = hint
+
+        } 
+      }
 
       function loadSession(session) {
         const location = session.location;
         const hint = session.hint;
         const answer = session.answer;
+        const hintButton = document.querySelector(".hint-button");
         console.log("data.questions[location];: ", data.questions[location]);
         console.log("questionBox: ", questionBox);
         questionBox.innerText = data.questions[location];
 
         if (hint) {
+          //if hint is available - create hint button, on click loadHints()
           // loadHints(hint) from sessionData (this should be filled out in the Hint function ticket)
+           hintButton.innerHTML = `<button id="hint-button" onclick="loadHints(hint)">HINT</button>`
+          
         }
         if (answer) {
           // loadAnswers from sessionStorage in case they are coming back to this question
