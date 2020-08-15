@@ -30,7 +30,6 @@
       </div>
       <div class="home-container">
         <div class="message" id="intro-message"></div>
-        <button class="button" id="home-button">Start Quiz</button>
       </div>
     </div>
       <div id="intro-message">
@@ -57,7 +56,6 @@
       let answerBox = document.getElementById("answer-box");
       let introMessageHeader = document.getElementById("intro-message-header");
       let introMessageBody = document.getElementById("intro-message-body");
-      let teacherMessage = document.getElementById("teacher-message");
 
       function saveSession(location, hint, answer) {
         sessionStorage.location = location;
@@ -84,6 +82,7 @@
       }
 
       function loadSession(session) {
+        window.sessionStorage.clear();
         const location = session.location;
         const hint = session.hint;
         const answer = session.answer;
@@ -136,7 +135,6 @@
           // clear card
           introMessageHeader.innerText = "";
           introMessageBody.innerText = "";
-          teacherMessage.innerText = "";
           // "a" is always after intro
           sessionStorage.location = "a";
         } else if (sessionStorage.location === "results") {
