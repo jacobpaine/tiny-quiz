@@ -21,7 +21,7 @@ let data = {
     f: "Sixth answer",
   },
   hints: {
-    a: { count: 0, hints: ["Hint One", "Hint Two", "Hint Three"] },
+    a: { count: 1, hints: ["Hint One", "Hint Two", "Hint Three"] },
     b: { count: 0, hints: ["Hint One", "Hint Two", "Hint Three"] },
     c: { count: 0, hints: ["Hint One", "Hint Two", "Hint Three"] },
     d: { count: 0, hints: ["Hint One", "Hint Two", "Hint Three"] },

@@ -59,6 +59,7 @@
 
       function saveSession(location, hint, answer) {
         sessionStorage.location = location;
+
         sessionStorage.answer = {
           showAnswer: answer.showAnswer,
           onScreen: answer.onScreen,
@@ -72,8 +73,6 @@
 
       function loadHints(sessionData) {
 
-        //on hint button click
-
         if (session.hint !== '') {
 
           hintBox.innerHTML = hint
@@ -82,17 +81,15 @@
       }
 
       function loadSession(session) {
-        
         const location = session.location;
-        const hint = session.hint;
+        let hint = session.hint
         const answer = session.answer;
         const hintButton = document.querySelector(".hint-button");
-        console.log("data.questions[location];: ", data.questions);
-        console.log("location", location)
-        console.log("questionBox: ", questionBox);
+        hintBox.innerText = data.hints[location];
         questionBox.innerText = data.questions[location];
 
-        if (hint) {
+
+        if (hint.count > 0) {
           //if hint is available - create hint button, on click loadHints()
           // loadHints(hint) from sessionData (this should be filled out in the Hint function ticket)
            hintButton.innerHTML = `<button id="hint-button" onclick="loadHints(hint)">HINT</button>`
@@ -138,7 +135,6 @@
           introMessageBody.innerText = "";
           // "a" is always after intro
           sessionStorage.location = "a";
-          console.log("session storage location", sessionStorage.location)
         } else if (sessionStorage.location === "results") {
           // results is always last, or if there is an error in the JSON
           console.log("Results");
@@ -148,8 +144,8 @@
           const nextQuestion = questions.indexOf(sessionStorage.location) + 1;
           sessionStorage.location = questions[nextQuestion] || "results";
         }
-console.log("session storage before next card", sessionStorage)
-        loadSession(sessionStorage);
+
+        loadSession(sessionStorage)
       }
 
       function showResuts() {}
