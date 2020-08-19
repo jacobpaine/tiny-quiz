@@ -51,6 +51,7 @@
     <script type="module">
       import { data } from "./mockData.js";
       const nextButton = document.getElementById("next-button");
+      const hintButton = document.querySelector(".hint-button");
       let questionBox = document.getElementById("question-box");
       let hintBox = document.getElementById("hint-box");
       let answerBox = document.getElementById("answer-box");
@@ -59,40 +60,29 @@
 
       function saveSession(location, hint, answer) {
         sessionStorage.location = location;
-
-        sessionStorage.answer = {
-          showAnswer: answer.showAnswer,
-          onScreen: answer.onScreen,
-          studentAnswer: answer.studentAnswer,
-        };
-        sessionStorage.hint = {
-          showHint: hint.showHint,
-          onScreen: hint.onScreen,
-        };
       }
 
-      function loadHints(sessionData) {
+      function loadHints() {
+       let showHint = sessionStorage.getItem("showHint");
 
-        if (session.hint !== '') {
-
-          hintBox.innerHTML = hint
-
-        } 
+        if (!showHint) {
+         hintBox.append(data.hints[sessionStorage.location][0])
+        } if (showHint) {
+          hintBox.append(data.hints[sessionStorage.location]+1)
+        }
       }
 
       function loadSession(session) {
         const location = session.location;
-        let hint = session.hint
+        const hint = session.hint
         const answer = session.answer;
-        const hintButton = document.querySelector(".hint-button");
-        hintBox.innerText = data.hints[location];
         questionBox.innerText = data.questions[location];
 
 
-        if (hint.count > 0) {
+        if (data.hints[location].length > 0) {
           //if hint is available - create hint button, on click loadHints()
           // loadHints(hint) from sessionData (this should be filled out in the Hint function ticket)
-           hintButton.innerHTML = `<button id="hint-button" onclick="loadHints(hint)">HINT</button>`
+           hintButton.innerHTML = `<button id="hint-button">HINT</button>`
           
         }
         if (answer) {
@@ -151,6 +141,7 @@
       function showResuts() {}
 
       nextButton.addEventListener("click", nextCard);
+      hintButton.addEventListener("click", loadHints)
 
       if (sessionStorage.location) {
         loadSession(sessionStorage);
