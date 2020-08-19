@@ -62,19 +62,48 @@
         sessionStorage.location = location;
       }
 
-      function loadHints() {
-       let showHint = sessionStorage.getItem("showHint");
+      function loadHints() {  
+       let currentHints = (data.hints[sessionStorage.location]);
+       let hintPosition = Number(sessionStorage.getItem("hintPosition")) || 0;
+       console.log(hintPosition)
+      let currentHint = currentHints[hintPosition];
+      let newHintPosition = currentHints[hintPosition + 1] ? hintPosition + 1 : hintPosition;
 
-        if (!showHint) {
-         hintBox.append(data.hints[sessionStorage.location][0])
-        } if (showHint) {
-          hintBox.append(data.hints[sessionStorage.location]+1)
-        }
+       console.log("current hint index", newHintPosition)
+       if(hintPosition + 1 >= currentHints.length) {
+         console.log("remove hint button")
+         hintButton.remove();
+       }
+     
+              hintBox.append(currentHint)
+   
+  
+        // if (!hintPosition) {
+        // let currentHint = currentHints[0];
+        //  hintBox.append(currentHint);
+        //  sessionStorage.setItem("currentHint", currentHint);
+        //  hintButton.innerHTML = `<button id="hintPosition-button">NEXT HINT</button>`;
+        //  return currentHint;
+        // } if (hintPosition) {
+        //  let index = currentHints.indexOf(hintPosition);
+        //   index++;
+        //  let currentHint = (currentHints[index]);
+        //  sessionStorage.setItem("currentHint", currentHint);
+        //  hintBox.append(currentHint);
+        //   hintButton.innerHTML = `<button id="hintPosition-button">NEXT HINT</button>`;
+        //   return currentHint;
+        // } if (hintPosition === undefined){
+        //   console.log("no more questions")
+        //   hintButton.remove()
+        // }
+
+      
+        sessionStorage.setItem("hintPosition", newHintPosition)
       }
 
       function loadSession(session) {
         const location = session.location;
-        const hint = session.hint
+        let hint = sessionStorage.getItem("currentHint");
         const answer = session.answer;
         questionBox.innerText = data.questions[location];
 
@@ -84,15 +113,15 @@
           // loadHints(hint) from sessionData (this should be filled out in the Hint function ticket)
            hintButton.innerHTML = `<button id="hint-button">HINT</button>`
           
-        }
+        } 
         if (answer) {
           // loadAnswers from sessionStorage in case they are coming back to this question
           // answerBox.innerText = data.answers[location];
-        }
+        } 
       }
 
       function initialSetup() {
-        saveSession("introduction", { showHint: false, onScreen: null }, {});
+        saveSession("introduction", { hint: false, onScreen: null }, {});
 
         let header = document.getElementById("intro-message-header");
         if (header !== "" && header !== "undefined" && header !== null) {
@@ -138,7 +167,7 @@
         loadSession(sessionStorage)
       }
 
-      function showResuts() {}
+      function showResults() {}
 
       nextButton.addEventListener("click", nextCard);
       hintButton.addEventListener("click", loadHints)
