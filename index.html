@@ -1,182 +1,152 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Tiny Quiz</title>
-    <link
-      href="https://fonts.googleapis.com/css2?family=Risque&display=swap"
-      rel="stylesheet"
-    />
-    <link rel="stylesheet" href="styles/index.css" />
-  </head>
-  <body>
-    <header>
-      <div class="header-container">
-        <h3>Tiny Quiz</h3>
-        <img src="images/star.png" alt="Star" id="star" />
-      </div>
-    </header>
-    <div id="main">
-      <div id="home-image">
-        <img src="images/robot.png" alt="Robot" id="robot" />
-      </div>
-      <div class="home-message">
-        <img
-          src="images/teacherMessage.png"
-          alt="Robot Message"
-          id="robot-message"
-        />
-      </div>
-      <div class="home-container">
-        <div class="message" id="intro-message"></div>
-      </div>
-    </div>
-      <div id="intro-message">
-        <div id="intro-message-header"></div>
-        <div id="intro-message-body"></div>
-      </div>
-    </div>
-    <div id="question-box"></div>
-    <div id="hint-box"></div>
-    <div id="answer-box">
-      <div id="officialAnswer"></div>
-      <div id="studentAnswer"></div>
-    </div>
-    <div class="hint-button"></div>
-    <button id="next-button"></button>
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+		<title>Tiny Quiz</title>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Risque&display=swap"
+			rel="stylesheet"
+		/>
+		<link rel="stylesheet" href="styles/index.css" />
+	</head>
+	<body>
+		<header>
+			<div class="header-container">
+				<h3>Tiny Quiz</h3>
+				<img src="images/star.png" alt="Star" id="star" />
+			</div>
+		</header>
+		<div id="main">
+			<div id="home-image">
+				<img src="images/robot.png" alt="Robot" id="robot" />
+			</div>
+			<div class="home-message">
+				<img
+					src="images/teacherMessage.png"
+					alt="Robot Message"
+					id="robot-message"
+				/>
+			</div>
+			<div class="home-container">
+				<div class="message" id="intro-message"></div>
+			</div>
+		</div>
+		<div id="intro-message">
+			<div id="intro-message-header"></div>
+			<div id="intro-message-body"></div>
+		</div>
+		<div id="question-box"></div>
+		<div id="hint-box"></div>
+		<div id="answer-box">
+			<div id="officialAnswer"></div>
+			<div id="studentAnswer"></div>
+		</div>
+		<div class="hint-button"></div>
+		<button id="next-button"></button>
 
+		<script type="module">
+			import { data } from "./mockData.js";
+			const nextButton = document.getElementById("next-button");
+			const hintButton = document.querySelector(".hint-button");
+			let questionBox = document.getElementById("question-box");
+			let hintBox = document.getElementById("hint-box");
+			let answerBox = document.getElementById("answer-box");
+			let introMessageHeader = document.getElementById("intro-message-header");
+			let introMessageBody = document.getElementById("intro-message-body");
 
+			function saveSession(location, hint, answer) {
+				sessionStorage.location = location;
+			}
 
-    <script type="module">
-      import { data } from "./mockData.js";
-      const nextButton = document.getElementById("next-button");
-      const hintButton = document.querySelector(".hint-button");
-      let questionBox = document.getElementById("question-box");
-      let hintBox = document.getElementById("hint-box");
-      let answerBox = document.getElementById("answer-box");
-      let introMessageHeader = document.getElementById("intro-message-header");
-      let introMessageBody = document.getElementById("intro-message-body");
+			function loadHints() {
+				let currentHints = data.hints[sessionStorage.location];
+				let hintPosition = Number(sessionStorage.getItem("hintPosition")) || 0;
+				let currentHint = currentHints[hintPosition];
+				let newHintPosition = currentHints[hintPosition + 1]
+					? hintPosition + 1
+					: hintPosition;
 
-      function saveSession(location, hint, answer) {
-        sessionStorage.location = location;
-      }
+				if (hintPosition + 1 >= currentHints.length) {
+					hintButton.remove();
+				}
 
-      function loadHints() {  
-       let currentHints = (data.hints[sessionStorage.location]);
-       let hintPosition = Number(sessionStorage.getItem("hintPosition")) || 0;
-       console.log(hintPosition)
-      let currentHint = currentHints[hintPosition];
-      let newHintPosition = currentHints[hintPosition + 1] ? hintPosition + 1 : hintPosition;
+				hintBox.append(currentHint);
+				sessionStorage.setItem("hintPosition", newHintPosition);
+			}
 
-       console.log("current hint index", newHintPosition)
-       if(hintPosition + 1 >= currentHints.length) {
-         console.log("remove hint button")
-         hintButton.remove();
-       }
-     
-              hintBox.append(currentHint)
-   
-  
-        // if (!hintPosition) {
-        // let currentHint = currentHints[0];
-        //  hintBox.append(currentHint);
-        //  sessionStorage.setItem("currentHint", currentHint);
-        //  hintButton.innerHTML = `<button id="hintPosition-button">NEXT HINT</button>`;
-        //  return currentHint;
-        // } if (hintPosition) {
-        //  let index = currentHints.indexOf(hintPosition);
-        //   index++;
-        //  let currentHint = (currentHints[index]);
-        //  sessionStorage.setItem("currentHint", currentHint);
-        //  hintBox.append(currentHint);
-        //   hintButton.innerHTML = `<button id="hintPosition-button">NEXT HINT</button>`;
-        //   return currentHint;
-        // } if (hintPosition === undefined){
-        //   console.log("no more questions")
-        //   hintButton.remove()
-        // }
+			function loadSession(session) {
+				const location = session.location;
+				let hint = sessionStorage.getItem("currentHint");
+				const answer = session.answer;
+				questionBox.innerText = data.questions[location];
+				if (data.hints[location].length > 0) {
+					//if hint is available - create hint button, on click loadHints()
+					// loadHints(hint) from sessionData (this should be filled out in the Hint function ticket)
+					hintButton.innerHTML = `<button id="hint-button">HINT</button>`;
+				}
+				if (answer) {
+					// loadAnswers from sessionStorage in case they are coming back to this question
+					// answerBox.innerText = data.answers[location];
+				}
+			}
 
-      
-        sessionStorage.setItem("hintPosition", newHintPosition)
-      }
+			function initialSetup() {
+				saveSession("introduction", { hint: false, onScreen: null }, {});
 
-      function loadSession(session) {
-        const location = session.location;
-        let hint = sessionStorage.getItem("currentHint");
-        const answer = session.answer;
-        questionBox.innerText = data.questions[location];
+				let header = document.getElementById("intro-message-header");
+				if (header !== "" && header !== "undefined" && header !== null) {
+					document.getElementById("intro-message-header").innerHTML =
+						data.introduction.header;
+				}
 
+				document.getElementById(
+					"intro-message-body"
+				).innerHTML = `Hello students, This quiz is for ${
+					data.introduction.subject
+				} and has ${
+					Object.keys(data.questions).length
+				} questions. Please submit your results. Good luck!`;
 
-        if (data.hints[location].length > 0) {
-          //if hint is available - create hint button, on click loadHints()
-          // loadHints(hint) from sessionData (this should be filled out in the Hint function ticket)
-           hintButton.innerHTML = `<button id="hint-button">HINT</button>`
-          
-        } 
-        if (answer) {
-          // loadAnswers from sessionStorage in case they are coming back to this question
-          // answerBox.innerText = data.answers[location];
-        } 
-      }
+				document.getElementById("next-button").innerText =
+					data.introduction.nextButton;
+			}
 
-      function initialSetup() {
-        saveSession("introduction", { hint: false, onScreen: null }, {});
+			function nextCard() {
+				// Always clear the questions/answers/hints from the DOM
+				questionBox.innerText = "";
+				hintBox.innerText = "";
+				answerBox.innerText = "";
 
-        let header = document.getElementById("intro-message-header");
-        if (header !== "" && header !== "undefined" && header !== null) {
-          document.getElementById("intro-message-header").innerHTML =
-            data.introduction.header;
-        }
+				// change session data to increment the card intro to a, a to b etc
+				if (sessionStorage.location === "introduction") {
+					// clear card
+					introMessageHeader.innerText = "";
+					introMessageBody.innerText = "";
+					// "a" is always after intro
+					sessionStorage.location = "a";
+				} else if (sessionStorage.location === "results") {
+					// results is always last, or if there is an error in the JSON
+					// Fire Results function - showResults()
+				} else {
+					const questions = Object.keys(data.questions).sort();
+					const nextQuestion = questions.indexOf(sessionStorage.location) + 1;
+					sessionStorage.location = questions[nextQuestion] || "results";
+				}
 
-        document.getElementById(
-          "intro-message-body"
-        ).innerHTML = `Hello students, This quiz is for ${
-          data.introduction.subject
-        } and has ${
-          Object.keys(data.questions).length
-        } questions. Please submit your results. Good luck!`;
+				loadSession(sessionStorage);
+			}
 
-        document.getElementById("next-button").innerText =
-          data.introduction.nextButton;
-      }
+			function showResults() {}
 
-      function nextCard() {
-        // Always clear the questions/answers/hints from the DOM
-        questionBox.innerText = "";
-        hintBox.innerText = "";
-        answerBox.innerText = "";
+			nextButton.addEventListener("click", nextCard);
+			hintButton.addEventListener("click", loadHints);
 
-        // change session data to increment the card intro to a, a to b etc
-        if (sessionStorage.location === "introduction") {
-          // clear card
-          introMessageHeader.innerText = "";
-          introMessageBody.innerText = "";
-          // "a" is always after intro
-          sessionStorage.location = "a";
-        } else if (sessionStorage.location === "results") {
-          // results is always last, or if there is an error in the JSON
-          console.log("Result");
-          // Fire Results function - showResults()
-        } else {
-          const questions = Object.keys(data.questions).sort();
-          const nextQuestion = questions.indexOf(sessionStorage.location) + 1;
-          sessionStorage.location = questions[nextQuestion] || "results";
-        }
-
-        loadSession(sessionStorage)
-      }
-
-      function showResults() {}
-
-      nextButton.addEventListener("click", nextCard);
-      hintButton.addEventListener("click", loadHints)
-
-      if (sessionStorage.location) {
-        loadSession(sessionStorage);
-      } else {
-        initialSetup();
-      }
-    </script>
-  </body>
+			if (sessionStorage.location) {
+				loadSession(sessionStorage);
+			} else {
+				initialSetup();
+			}
+		</script>
+	</body>
 </html>
