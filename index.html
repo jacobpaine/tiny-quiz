@@ -81,16 +81,25 @@
 
 				// if !results make button to loadHints / else check if results
 				if (location !== "results") {
-					if (data.hints[location].length > 0) {
+					if (data.hints[location].length >= 0) {
 						hintButton.innerHTML = `<button id="hint-button">HINT</button>`;
 					}
 					questionBox.innerHTML += `<div id="question">${data.questions[location]}</div>`;
-					answerBox.innerHTML += `<input type='text'></input>`;
+					answerBox.innerHTML += `<input id="answerInput" type='text'></input>`;
+					answerBox.innerHTML += `<button id="answer">Answer</button>`;
+					document
+						.getElementById("answer")
+						.addEventListener("click", storeAnswer);
 				} else {
 					hintButton.innerHTML = "";
 					const results = sessionStorage;
 					console.log("results:", results);
 				}
+			}
+
+			function storeAnswer(e) {
+				let answer = document.getElementById("answerInput").value;
+				sessionStorage.setItem(sessionStorage.location, answer);
 			}
 
 			function loadResults() {
@@ -125,6 +134,7 @@
 				hintBox.innerText = "";
 				answerBox.innerText = "";
 				nextButton.innerText = "Next Question";
+				sessionStorage.hintPosition = 0;
 				// change session data to increment the card intro to a, a to b etc
 				if (sessionStorage.location === "introduction") {
 					// clear card
