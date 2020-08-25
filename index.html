@@ -80,15 +80,23 @@
 				let hint = sessionStorage.getItem("currentHint");
 				const answer = session.answer;
 				questionBox.innerText = data.questions[location];
-				if (data.hints[location].length > 0) {
-					//if hint is available - create hint button, on click loadHints()
-					// loadHints(hint) from sessionData (this should be filled out in the Hint function ticket)
+				// if hints create option to loadHints / else check if results
+				if (location === "results") {
+					const results = sessionStorage;
+					console.log("results:", results);
+				} else if (data.hints[location].length > 0) {
 					hintButton.innerHTML = `<button id="hint-button">HINT</button>`;
 				}
+
 				if (answer) {
 					// loadAnswers from sessionStorage in case they are coming back to this question
 					// answerBox.innerText = data.answers[location];
 				}
+			}
+
+			function loadResults() {
+				const results = sessionStorage;
+				console.log("results: ", results);
 			}
 
 			function initialSetup() {
@@ -117,7 +125,7 @@
 				questionBox.innerText = "";
 				hintBox.innerText = "";
 				answerBox.innerText = "";
-
+				nextButton.innerText = "Next Question";
 				// change session data to increment the card intro to a, a to b etc
 				if (sessionStorage.location === "introduction") {
 					// clear card
@@ -133,7 +141,6 @@
 					const nextQuestion = questions.indexOf(sessionStorage.location) + 1;
 					sessionStorage.location = questions[nextQuestion] || "results";
 				}
-
 				loadSession(sessionStorage);
 			}
 
