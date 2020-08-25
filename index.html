@@ -39,7 +39,6 @@
 		<div id="question-box"></div>
 		<div id="hint-box"></div>
 		<div id="answer-box">
-			<div id="officialAnswer"></div>
 			<div id="studentAnswer"></div>
 		</div>
 		<div class="hint-button"></div>
@@ -79,18 +78,18 @@
 				const location = session.location;
 				let hint = sessionStorage.getItem("currentHint");
 				const answer = session.answer;
-				questionBox.innerText = data.questions[location];
-				// if hints create option to loadHints / else check if results
-				if (location === "results") {
+
+				// if !results make button to loadHints / else check if results
+				if (location !== "results") {
+					if (data.hints[location].length > 0) {
+						hintButton.innerHTML = `<button id="hint-button">HINT</button>`;
+					}
+					questionBox.innerHTML += `<div id="question">${data.questions[location]}</div>`;
+					answerBox.innerHTML += `<input type='text'></input>`;
+				} else {
+					hintButton.innerHTML = "";
 					const results = sessionStorage;
 					console.log("results:", results);
-				} else if (data.hints[location].length > 0) {
-					hintButton.innerHTML = `<button id="hint-button">HINT</button>`;
-				}
-
-				if (answer) {
-					// loadAnswers from sessionStorage in case they are coming back to this question
-					// answerBox.innerText = data.answers[location];
 				}
 			}
 
