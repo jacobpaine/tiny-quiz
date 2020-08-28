@@ -41,6 +41,7 @@
 		<div id="answer-box">
 			<div id="studentAnswer"></div>
 		</div>
+		<div id="results"></div>
 		<div class="hint-button"></div>
 		<button id="next-button"></button>
 
@@ -53,6 +54,7 @@
 			let answerBox = document.getElementById("answer-box");
 			let introMessageHeader = document.getElementById("intro-message-header");
 			let introMessageBody = document.getElementById("intro-message-body");
+			let resultsLoaded;
 
 			function saveSession(location, hint, answer) {
 				sessionStorage.location = location;
@@ -60,7 +62,8 @@
 
 			function loadHints() {
 				let currentHints = data.hints[sessionStorage.location];
-				let hintPosition = Number(sessionStorage.getItem("hintPosition")) || 0;
+				let hintVar = sessionStorage.location + "hintPosition";
+				let hintPosition = Number(sessionStorage.getItem(hintVar)) || 0;
 				let currentHint = currentHints[hintPosition];
 				let newHintPosition = currentHints[hintPosition + 1]
 					? hintPosition + 1
@@ -71,7 +74,7 @@
 				}
 
 				hintBox.append(currentHint);
-				sessionStorage.setItem("hintPosition", newHintPosition);
+				sessionStorage.setItem(hintVar, newHintPosition);
 			}
 
 			function loadSession(session) {
@@ -90,9 +93,6 @@
 					document
 						.getElementById("answer")
 						.addEventListener("click", storeAnswer);
-				} else {
-					hintButton.innerHTML = "";
-					const results = sessionStorage;
 				}
 			}
 
@@ -103,6 +103,22 @@
 
 			function loadResults() {
 				const results = sessionStorage;
+				if (!resultsLoaded) {
+					console.log("results: ", results);
+
+					Object.keys(results)
+						.sort()
+						.forEach((item) => {
+							if (item === "location") return;
+							document.getElementById(
+								"results"
+							).innerHTML += `${data.questions[item]}`;
+							document.getElementById(
+								"results"
+							).innerHTML += `${results[item]}`;
+						});
+				}
+				resultsLoaded = true;
 			}
 
 			function initialSetup() {
@@ -127,12 +143,18 @@
 			}
 
 			function nextCard() {
+				if (
+					document.getElementById("answerInput") &&
+					document.getElementById("answerInput").value === ""
+				) {
+					document.getElementById("answerInput").style.borderColor = "red";
+					return;
+				}
 				// Always clear the questions/answers/hints from the DOM
 				questionBox.innerText = "";
 				hintBox.innerText = "";
 				answerBox.innerText = "";
 				nextButton.innerText = "Next Question";
-				sessionStorage.hintPosition = 0;
 				// change session data to increment the card intro to a, a to b etc
 				if (sessionStorage.location === "introduction") {
 					// clear card
@@ -141,8 +163,7 @@
 					// "a" is always after intro
 					sessionStorage.location = "a";
 				} else if (sessionStorage.location === "results") {
-					// results is always last, or if there is an error in the JSON
-					// Fire Results function - showResults()
+					loadResults();
 				} else {
 					const questions = Object.keys(data.questions).sort();
 					const nextQuestion = questions.indexOf(sessionStorage.location) + 1;
@@ -150,8 +171,6 @@
 				}
 				loadSession(sessionStorage);
 			}
-
-			function showResults() {}
 
 			nextButton.addEventListener("click", nextCard);
 			hintButton.addEventListener("click", loadHints);
